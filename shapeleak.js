@@ -4,11 +4,7 @@ const ErrorStackParser = require('error-stack-parser')
 const Chalk = require('chalk')
 
 function build(pObject) {
-  if (
-    !pObject &&
-    typeof pObject !== 'object' &&
-    typeof pObject !== 'function'
-  ) {
+  if (typeof pObject !== 'object' || pObject === null) {
     return pObject
   }
 
