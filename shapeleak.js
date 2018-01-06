@@ -4,6 +4,14 @@ const ErrorStackParser = require('error-stack-parser')
 const Chalk = require('chalk')
 
 function build(pObject) {
+  if (
+    !pObject &&
+    typeof pObject !== 'object' &&
+    typeof pObject !== 'function'
+  ) {
+    return pObject
+  }
+
   function getStack() {
     const trace = {}
     Error.captureStackTrace(trace)
@@ -29,9 +37,11 @@ function build(pObject) {
       set: (target, property, value, receiver) => {
         if (shape.indexOf(property) === -1) {
           console.log(Chalk.blue.underline(`${getStack()}`))
-          console.log(`\t Property '${Chalk.blue.bgRed.bold(
-            property
-          )}' was added to original shape [${shape.join(',')}]`)
+          console.log(
+            `\t Property '${Chalk.blue.bgRed.bold(
+              property
+            )}' was added to original shape [${shape.join(',')}]`
+          )
         } else if (typeof target[property] !== typeof value) {
           console.log(Chalk.blue.underline(`${getStack()}`))
           console.log(
