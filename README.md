@@ -6,7 +6,7 @@ Requires Node 6.4+
 ## Features
 
 - Print exact location of the vulnerability.
-- Can be applied to factorys and `new`.
+- Can be applied to Factory, Object-Literal and objects instantiated by `new`.
 - Does not break existing code.
 
 ## Example
