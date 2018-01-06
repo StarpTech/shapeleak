@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use strict'
 
 const Shaped = require('./')
@@ -34,4 +36,17 @@ const b = build('peter')
 b.name = 'sandra'
 b.name = 1
 b.foo = 'bar'
+delete b.name
+
+/**
+ * Plain Object
+ */
+
+let c = Shaped({
+  name: 'peter'
+})
+
+c.name = 'sandra'
+c.name = 1
+c.foo = 'bar'
 delete b.name

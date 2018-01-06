@@ -65,8 +65,8 @@ function build(pObject) {
       const shape = Object.getOwnPropertyNames(newObj)
       return shapeDetector(shape, newObj)
     },
-    construct: function(target, argumentsList, newTarget) {
-      const newObj = new target(...argumentsList)
+    construct: function(Target, argumentsList, newTarget) {
+      const newObj = new Target(...argumentsList)
       const shape = Object.getOwnPropertyNames(newObj)
       return shapeDetector(shape, newObj)
     }
