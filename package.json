@@ -1,0 +1,43 @@
+{
+  "name": "shapeleak",
+  "version": "0.0.1",
+  "description": "Find subsequent changes in Objects which results in unoptimized code",
+  "main": "shapeleak.js",
+  "keywords": [
+    "hidden-class",
+    "shape",
+    "V8",
+    "performance"
+  ],
+  "scripts": {
+    "lint": "eslint ./**/*.js",
+    "test": "nyc mocha -t 5000 --exit ./test/**/*.js",
+    "coverage": "npm run test && nyc report --reporter=html",
+    "patch": "np patch --yolo",
+    "minor": "np minor --yolo",
+    "major": "np major --yolo"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StarpTech/shaped.git"
+  },
+  "author": "Dustin Deus <deusdustin@gmail.com> (http://www.starptech.de)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/StarpTech/shaped/issues"
+  },
+  "homepage": "https://github.com/StarpTech/shaped#readme",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "error-stack-parser": "^2.0.1"
+  },
+  "devDependencies": {
+    "code": "^5.1.2",
+    "eslint": "^4.14.0",
+    "eslint-config-hemera": "0.0.2",
+    "mocha": "^4.1.0",
+    "np": "^2.18.3",
+    "nyc": "^11.4.1",
+    "prettier": "^1.9.2"
+  }
+}
