@@ -1,5 +1,5 @@
-# shaped
-Find subsequent changes in Objects which results in unoptimized code. If you don't know what we talking about I can recommend [this](https://blog.ghaiklor.com/optimizations-tricks-in-v8-d284b6c8b183) article.
+# shapeleak
+Find subsequent changes of Objects which results in unoptimized code. If you don't know what we talking about I can recommend [this](https://blog.ghaiklor.com/optimizations-tricks-in-v8-d284b6c8b183) article.
 
 Requires Node 6.4+
 
