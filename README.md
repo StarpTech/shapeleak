@@ -13,6 +13,8 @@ Requires Node 6.4+
 ```js
 const S = require('shapeleak')
 
+// new
+
 class A {
   constructor(name) {
     this.name = name
@@ -36,6 +38,8 @@ E:\Repositorys\shaped\example.js:20:1
          Property 'name' was deleted from original shape [name]
 */
 
+// Factory
+
 function build(name) {
   return {
     name
@@ -57,5 +61,25 @@ E:\Repositorys\shaped\example.js:36:7
          Property 'foo' was added to original shape [name]
 E:\Repositorys\shaped\example.js:37:1
          Property 'name' was deleted from original shape [name]
+*/
+
+// Object literal
+
+let c = Shaped({
+  name: 'peter'
+})
+
+c.name = 'sandra'
+c.name = 1
+c.foo = 'bar'
+delete b.name
+
+/*
+E:\Repositorys\shaped\example.js:50:8
+         Property 'name' has changed their concrete type from 'string' to 'number'
+E:\Repositorys\shaped\example.js:51:7
+         Property 'foo' was added to original shape [name]
+E:\Repositorys\shaped\example.js:52:1
+         Property 'name' was deleted from original shape [foo]
 */
 ```
