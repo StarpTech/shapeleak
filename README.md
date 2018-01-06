@@ -11,7 +11,7 @@ Requires Node 6.4+
 
 ## Example
 ```js
-const S = require('shaped')
+const S = require('shapeleak')
 
 class A {
   constructor(name) {
