@@ -58,7 +58,7 @@ function build(pObject) {
         } else if (frame.operation === 'type') {
           text += `${' '}${location}  ${Chalk.yellow.bold(
             'warn'
-          )}${'  '}- Property '${frame.property}' has change his type from '${
+          )}${'  '}- Property '${frame.property}' has changed it's type from '${
             frame.oldType
           }' to '${frame.newType}' \n`
         }
