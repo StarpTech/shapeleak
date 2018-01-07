@@ -1,7 +1,7 @@
 {
   "name": "shapeleak",
   "version": "0.0.5",
-  "description": "Find subsequent changes in the shape (hidden-class) of your Objects which results in unoptimized code",
+  "description": "Find subsequent changes in the shape (hidden-class) of your Objects which result in unoptimized code",
   "main": "shapeleak.js",
   "keywords": [
     "hidden-class",

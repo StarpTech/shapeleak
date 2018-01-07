@@ -1,5 +1,5 @@
 # shapeleak
-Find subsequent changes in the shape (hidden-class) of your Objects which results in unoptimized code. If you don't know what we talking about I can recommend [this](https://blog.ghaiklor.com/optimizations-tricks-in-v8-d284b6c8b183) article.
+Find subsequent changes in the shape (hidden-class) of your Objects which result in unoptimized code. If you don't know what we talking about I can recommend [this](https://blog.ghaiklor.com/optimizations-tricks-in-v8-d284b6c8b183) article.
 
 Requires Node 6.4+
 
