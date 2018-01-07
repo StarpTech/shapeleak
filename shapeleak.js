@@ -63,7 +63,7 @@ function build(pObject) {
             property
           )}' was added to original shape [${shape.join(',')}]`
         )
-      } else if (typeof target[property] !== typeof value) {
+      } else if (typeof target[property] !== typeof receiver[property]) {
         console.log(Chalk.blue.underline(`${getStack('Object.set')}`))
         console.log(
           `\t Property '${Chalk.blue.bgRed.bold(
