@@ -59,6 +59,7 @@ delete b.name
 
 ### Output
 ```
+E:\Repositorys\shaped\example.js
 20:8  warn - Property 'name' has change his type from 'string' to 'number'
 21:7  error - Property 'foo' was added to shape (name)
 22:1  error - Property 'name' was deleted from shape (name,foo)
