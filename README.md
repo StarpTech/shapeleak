@@ -59,14 +59,13 @@ delete b.name
 
 ### Output
 ```
-E:\Repositorys\shaped\example.js
-20:8  warn - Property 'name' has change their type from 'string' to 'number'
+20:8  warn - Property 'name' has change his type from 'string' to 'number'
 21:7  error - Property 'foo' was added to shape (name)
-22:1  error - Property 'name' was deleted from shape (name, foo)
-37:8  warn - Property 'name' has change their type from 'string' to 'string'
+22:1  error - Property 'name' was deleted from shape (name,foo)
+37:8  warn - Property 'name' has change his type from 'string' to 'string'
 38:7  error - Property 'foo' was added to shape (name)
-39:1  error - Property 'name' was deleted from shape (name, foo)
-50:8  warn - Property 'name' has change their type from 'string' to 'string'
+39:1  error - Property 'name' was deleted from shape (name,foo)
+50:8  warn - Property 'name' has change his type from 'string' to 'string'
 51:7  error - Property 'foo' was added to shape (name)
 52:1  error - Property 'name' was deleted from shape (foo)
 ```
