@@ -112,7 +112,7 @@ function build(pObject) {
             shape,
             property,
             oldType: typeof target[property],
-            newType: typeof receiver[property]
+            newType: typeof value
           })
         } else {
           items.set(stackFrame.fileName, [
