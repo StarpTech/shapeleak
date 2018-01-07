@@ -38,24 +38,29 @@ function build(pObject) {
       text += fileName + '\n'
       for (let i = 0; i < value.length; i++) {
         const frame = value[i]
+        const fieldsLimit = 20
+        const shapeString =
+          frame.shape.length < fieldsLimit
+            ? frame.shape
+            : frame.shape.slice(0, fieldsLimit).join(',') + '...'
         const location = `${frame.stackFrame.lineNumber}:${
           frame.stackFrame.columnNumber
         }`
 
         if (frame.operation === 'delete') {
-          text += `${location}  ${Chalk.red.bold('error')} - Property '${
+          text += `${' '}${location}  ${Chalk.red.bold('error')} - Property '${
             frame.property
-          }' was deleted from shape (${frame.shape.join(',')}) \n`
+          }' was deleted from shape (${shapeString}) \n`
         } else if (frame.operation === 'set') {
-          text += `${location}  ${Chalk.red.bold('error')} - Property '${
+          text += `${' '}${location}  ${Chalk.red.bold('error')} - Property '${
             frame.property
-          }' was added to shape (${frame.shape.join(',')}) \n`
+          }' was added to shape (${shapeString}) \n`
         } else if (frame.operation === 'type') {
-          text += `${location}  ${Chalk.yellow.bold('warn')} - Property '${
-            frame.property
-          }' has change his type from '${frame.oldType}' to '${
-            frame.newType
-          }' \n`
+          text += `${' '}${location}  ${Chalk.yellow.bold(
+            'warn'
+          )}${'  '}- Property '${frame.property}' has change his type from '${
+            frame.oldType
+          }' to '${frame.newType}' \n`
         }
       }
     }
@@ -75,14 +80,11 @@ function build(pObject) {
     deleteProperty: (target, property) => {
       const shape = Object.getOwnPropertyNames(target)
       const stackFrame = getStack('Object.deleteProperty')
+      const item = { stackFrame, operation: 'delete', shape, property }
       if (items.has(stackFrame.fileName)) {
-        items
-          .get(stackFrame.fileName)
-          .push({ stackFrame, operation: 'delete', shape, property })
+        items.get(stackFrame.fileName).push(item)
       } else {
-        items.set(stackFrame.fileName, [
-          { stackFrame, operation: 'delete', shape, property }
-        ])
+        items.set(stackFrame.fileName, [item])
       }
 
       draw()
@@ -93,38 +95,27 @@ function build(pObject) {
     set: (target, property, value, receiver) => {
       const shape = Object.getOwnPropertyNames(target)
       const stackFrame = getStack('Object.set')
+      const item = { stackFrame, operation: 'set', shape, property }
       if (shape.indexOf(property) === -1) {
         if (items.has(stackFrame.fileName)) {
-          items
-            .get(stackFrame.fileName)
-            .push({ stackFrame, operation: 'set', shape, property })
+          items.get(stackFrame.fileName).push(item)
         } else {
-          items.set(stackFrame.fileName, [
-            { stackFrame, operation: 'set', shape, property }
-          ])
+          items.set(stackFrame.fileName, [item])
         }
       }
       if (target[property] && typeof target[property] !== typeof value) {
+        const item = {
+          stackFrame,
+          operation: 'type',
+          shape,
+          property,
+          oldType: typeof target[property],
+          newType: typeof value
+        }
         if (items.has(stackFrame.fileName)) {
-          items.get(stackFrame.fileName).push({
-            stackFrame,
-            operation: 'type',
-            shape,
-            property,
-            oldType: typeof target[property],
-            newType: typeof value
-          })
+          items.get(stackFrame.fileName).push(item)
         } else {
-          items.set(stackFrame.fileName, [
-            {
-              stackFrame,
-              operation: 'type',
-              shape,
-              property,
-              oldType: typeof target[property],
-              newType: typeof value
-            }
-          ])
+          items.set(stackFrame.fileName, [item])
         }
       }
 
