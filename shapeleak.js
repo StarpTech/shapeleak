@@ -2,7 +2,6 @@
 
 const ErrorStackParser = require('error-stack-parser')
 const Chalk = require('chalk')
-const _ = require('lodash')
 
 function build(pObject) {
   if (
@@ -12,32 +11,23 @@ function build(pObject) {
     return pObject
   }
 
-  function getStack(operation) {
+  function getStack(functionName) {
     const trace = {}
     Error.captureStackTrace(trace)
     const frames = ErrorStackParser.parse(trace)
     let index = 0
 
-    switch (operation) {
-      case 'set':
-        index = _.findLastIndex(
-          frames,
-          x =>
-            x.functionName === 'Object.set' &&
-            x.fileName.endsWith('shaped\\shapeleak.js')
-        )
-        break
-      case 'delete':
-        index = _.findLastIndex(
-          frames,
-          x =>
-            x.functionName === 'Object.deleteProperty' &&
-            x.fileName.endsWith('shaped\\shapeleak.js')
-        )
-        break
+    for (let i = 0; i < frames.length; i++) {
+      const frame = frames[i]
+      if (frame.functionName === functionName) {
+        if (frames[i + 1].functionName !== functionName) {
+          index = i + 1
+          break
+        }
+      }
     }
 
-    const targetFrame = frames[index + 1]
+    const targetFrame = frames[index]
 
     return `${targetFrame.fileName}:${targetFrame.lineNumber}:${
       targetFrame.columnNumber
@@ -55,7 +45,7 @@ function build(pObject) {
     },
     deleteProperty: (target, property) => {
       const shape = Object.getOwnPropertyNames(target)
-      console.log(Chalk.blue.underline(`${getStack('delete')}`))
+      console.log(Chalk.blue.underline(`${getStack('Object.deleteProperty')}`))
       console.log(
         `\t Property '${Chalk.blue.bgRed.bold(
           property
@@ -67,14 +57,14 @@ function build(pObject) {
     set: (target, property, value, receiver) => {
       const shape = Object.getOwnPropertyNames(target)
       if (shape.indexOf(property) === -1) {
-        console.log(Chalk.blue.underline(`${getStack('set')}`))
+        console.log(Chalk.blue.underline(`${getStack('Object.set')}`))
         console.log(
           `\t Property '${Chalk.blue.bgRed.bold(
             property
           )}' was added to original shape [${shape.join(',')}]`
         )
       } else if (typeof target[property] !== typeof value) {
-        console.log(Chalk.blue.underline(`${getStack('set')}`))
+        console.log(Chalk.blue.underline(`${getStack('Object.set')}`))
         console.log(
           `\t Property '${Chalk.blue.bgRed.bold(
             property
