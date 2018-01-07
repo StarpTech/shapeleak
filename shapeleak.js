@@ -2,6 +2,7 @@
 
 const ErrorStackParser = require('error-stack-parser')
 const Chalk = require('chalk')
+const _ = require('lodash')
 
 function build(pObject) {
   if (
@@ -11,11 +12,33 @@ function build(pObject) {
     return pObject
   }
 
-  function getStack() {
+  function getStack(operation) {
     const trace = {}
     Error.captureStackTrace(trace)
     const frames = ErrorStackParser.parse(trace)
-    const targetFrame = frames[2]
+    let index = 0
+
+    switch (operation) {
+      case 'set':
+        index = _.findLastIndex(
+          frames,
+          x =>
+            x.functionName === 'Object.set' &&
+            x.fileName.endsWith('shaped\\shapeleak.js')
+        )
+        break
+      case 'delete':
+        index = _.findLastIndex(
+          frames,
+          x =>
+            x.functionName === 'Object.deleteProperty' &&
+            x.fileName.endsWith('shaped\\shapeleak.js')
+        )
+        break
+    }
+
+    const targetFrame = frames[index + 1]
+
     return `${targetFrame.fileName}:${targetFrame.lineNumber}:${
       targetFrame.columnNumber
     }`
@@ -32,7 +55,7 @@ function build(pObject) {
     },
     deleteProperty: (target, property) => {
       const shape = Object.getOwnPropertyNames(target)
-      console.log(Chalk.blue.underline(`${getStack()}`))
+      console.log(Chalk.blue.underline(`${getStack('delete')}`))
       console.log(
         `\t Property '${Chalk.blue.bgRed.bold(
           property
@@ -44,14 +67,14 @@ function build(pObject) {
     set: (target, property, value, receiver) => {
       const shape = Object.getOwnPropertyNames(target)
       if (shape.indexOf(property) === -1) {
-        console.log(Chalk.blue.underline(`${getStack()}`))
+        console.log(Chalk.blue.underline(`${getStack('set')}`))
         console.log(
           `\t Property '${Chalk.blue.bgRed.bold(
             property
           )}' was added to original shape [${shape.join(',')}]`
         )
       } else if (typeof target[property] !== typeof value) {
-        console.log(Chalk.blue.underline(`${getStack()}`))
+        console.log(Chalk.blue.underline(`${getStack('set')}`))
         console.log(
           `\t Property '${Chalk.blue.bgRed.bold(
             property
