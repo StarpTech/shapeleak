@@ -1,6 +1,6 @@
 {
   "name": "shapeleak",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Find subsequent changes in Objects which results in unoptimized code",
   "main": "shapeleak.js",
   "keywords": [
