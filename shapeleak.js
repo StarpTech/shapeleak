@@ -2,6 +2,8 @@
 
 const ErrorStackParser = require('error-stack-parser')
 const Chalk = require('chalk')
+const LogUpdate = require('log-update')
+const items = new Map()
 
 function build(pObject) {
   if (
@@ -27,11 +29,38 @@ function build(pObject) {
       }
     }
 
-    const targetFrame = frames[index]
+    return frames[index]
+  }
 
-    return `${targetFrame.fileName}:${targetFrame.lineNumber}:${
-      targetFrame.columnNumber
-    }`
+  function draw() {
+    let text = ''
+    for (const [fileName, value] of items) {
+      text += fileName + '\n'
+      for (let i = 0; i < value.length; i++) {
+        const frame = value[i]
+        const location = `${frame.stackFrame.lineNumber}:${
+          frame.stackFrame.columnNumber
+        }`
+
+        if (frame.operation === 'delete') {
+          text += `${location}  ${Chalk.red.bold('error')} - Property '${
+            frame.property
+          }' was deleted from shape (${frame.shape.join(',')}) \n`
+        } else if (frame.operation === 'set') {
+          text += `${location}  ${Chalk.red.bold('error')} - Property '${
+            frame.property
+          }' was added to shape (${frame.shape.join(',')}) \n`
+        } else if (frame.operation === 'type') {
+          text += `${location}  ${Chalk.yellow.bold('warn')} - Property '${
+            frame.property
+          }' has change their type from '${frame.oldType}' to '${
+            frame.newType
+          }' \n`
+        }
+      }
+    }
+
+    LogUpdate(text)
   }
 
   const proxyOpts = {
@@ -45,34 +74,61 @@ function build(pObject) {
     },
     deleteProperty: (target, property) => {
       const shape = Object.getOwnPropertyNames(target)
-      console.log(Chalk.blue.underline(`${getStack('Object.deleteProperty')}`))
-      console.log(
-        `\t Property '${Chalk.blue.bgRed.bold(
-          property
-        )}' was deleted from original shape [${shape.join(',')}]`
-      )
+      const stackFrame = getStack('Object.deleteProperty')
+      if (items.has(stackFrame.fileName)) {
+        items
+          .get(stackFrame.fileName)
+          .push({ stackFrame, operation: 'delete', shape, property })
+      } else {
+        items.set(stackFrame.fileName, [
+          { stackFrame, operation: 'delete', shape, property }
+        ])
+      }
+
+      draw()
+
       delete target[property]
       return true
     },
     set: (target, property, value, receiver) => {
       const shape = Object.getOwnPropertyNames(target)
+      const stackFrame = getStack('Object.set')
       if (shape.indexOf(property) === -1) {
-        console.log(Chalk.blue.underline(`${getStack('Object.set')}`))
-        console.log(
-          `\t Property '${Chalk.blue.bgRed.bold(
-            property
-          )}' was added to original shape [${shape.join(',')}]`
-        )
-      } else if (typeof target[property] !== typeof receiver[property]) {
-        console.log(Chalk.blue.underline(`${getStack('Object.set')}`))
-        console.log(
-          `\t Property '${Chalk.blue.bgRed.bold(
-            property
-          )}' has changed their concrete type from '${typeof target[
-            property
-          ]}' to '${typeof value}'`
-        )
+        if (items.has(stackFrame.fileName)) {
+          items
+            .get(stackFrame.fileName)
+            .push({ stackFrame, operation: 'set', shape, property })
+        } else {
+          items.set(stackFrame.fileName, [
+            { stackFrame, operation: 'set', shape, property }
+          ])
+        }
       }
+      if (target[property] && typeof target[property] !== typeof value) {
+        if (items.has(stackFrame.fileName)) {
+          items.get(stackFrame.fileName).push({
+            stackFrame,
+            operation: 'type',
+            shape,
+            property,
+            oldType: typeof target[property],
+            newType: typeof receiver[property]
+          })
+        } else {
+          items.set(stackFrame.fileName, [
+            {
+              stackFrame,
+              operation: 'type',
+              shape,
+              property,
+              oldType: typeof target[property],
+              newType: typeof value
+            }
+          ])
+        }
+      }
+
+      draw()
 
       target[property] = value
       return true

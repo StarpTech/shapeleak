@@ -29,15 +29,6 @@ a.name = 1
 a.foo = 'bar'
 delete a.name
 
-/*
-E:\Repositorys\shaped\example.js:18:8
-         Property 'name' has changed their concrete type from 'string' to 'number'
-E:\Repositorys\shaped\example.js:19:7
-         Property 'foo' was added to original shape [name]
-E:\Repositorys\shaped\example.js:20:1
-         Property 'name' was deleted from original shape [name]
-*/
-
 // Factory
 
 function build(name) {
@@ -54,15 +45,6 @@ b.name = 1
 b.foo = 'bar'
 delete b.name
 
-/*
-E:\Repositorys\shaped\example.js:35:8
-         Property 'name' has changed their concrete type from 'string' to 'number'
-E:\Repositorys\shaped\example.js:36:7
-         Property 'foo' was added to original shape [name]
-E:\Repositorys\shaped\example.js:37:1
-         Property 'name' was deleted from original shape [name]
-*/
-
 // Object literal
 
 let c = Shaped({
@@ -73,13 +55,18 @@ c.name = 'sandra'
 c.name = 1
 c.foo = 'bar'
 delete b.name
+```
 
-/*
-E:\Repositorys\shaped\example.js:50:8
-         Property 'name' has changed their concrete type from 'string' to 'number'
-E:\Repositorys\shaped\example.js:51:7
-         Property 'foo' was added to original shape [name]
-E:\Repositorys\shaped\example.js:52:1
-         Property 'name' was deleted from original shape [foo]
-*/
+### Output
+```
+E:\Repositorys\shaped\example.js
+20:8  warn - Property 'name' has change their type from 'string' to 'number'
+21:7  error - Property 'foo' was added to shape (name)
+22:1  error - Property 'name' was deleted from shape (name, foo)
+37:8  warn - Property 'name' has change their type from 'string' to 'string'
+38:7  error - Property 'foo' was added to shape (name)
+39:1  error - Property 'name' was deleted from shape (name, foo)
+50:8  warn - Property 'name' has change their type from 'string' to 'string'
+51:7  error - Property 'foo' was added to shape (name)
+52:1  error - Property 'name' was deleted from shape (foo)
 ```

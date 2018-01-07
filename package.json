@@ -29,7 +29,8 @@
   "homepage": "https://github.com/StarpTech/shaped#readme",
   "dependencies": {
     "chalk": "^2.3.0",
-    "error-stack-parser": "^2.0.1"
+    "error-stack-parser": "^2.0.1",
+    "log-update": "^2.3.0"
   },
   "devDependencies": {
     "code": "^5.1.2",
