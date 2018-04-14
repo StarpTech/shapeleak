@@ -57,16 +57,16 @@ c.foo = 'bar'
 delete b.name
 ```
 
-### Output
+## Output
 ```
 E:\Repositorys\shaped\example.js
-  20:8  warn  - Property 'name' has changed it's type from 'string' to 'number'
-  21:7  error - Property 'foo' was added to shape (name)
-  22:1  error - Property 'name' was deleted from shape (name,foo)
-  37:8  warn  - Property 'name' has change his type from 'string' to 'number'
-  38:7  error - Property 'foo' was added to shape (name)
-  39:1  error - Property 'name' was deleted from shape (name,foo)
-  50:8  warn  - Property 'name' has changed it's type from 'string' to 'number'
-  51:7  error - Property 'foo' was added to shape (name)
-  52:1  error - Property 'name' was deleted from shape (foo)
+  20:8  type update  - Property 'name' has changed it's type from 'string' to 'number'
+  21:7  create - Property 'foo' was added to shape (name)
+  22:1  delete - Property 'name' was deleted from shape (name,foo)
+  37:8  type update  - Property 'name' has changed it's type from 'string' to 'number'
+  38:7  create - Property 'foo' was added to shape (name)
+  39:1  delete - Property 'name' was deleted from shape (name,foo)
+  50:8  type update  - Property 'name' has changed it's type from 'string' to 'number'
+  51:7  create - Property 'foo' was added to shape (name)
+  52:1  delete - Property 'name' was deleted from shape (foo)
 ```

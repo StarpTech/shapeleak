@@ -48,16 +48,18 @@ function build(pObject) {
         }`
 
         if (frame.operation === 'delete') {
-          text += `${' '}${location}  ${Chalk.red.bold('error')} - Property '${
+          text += `${' '}${location}  ${Chalk.red.bold('delete')} - Property '${
             frame.property
           }' was deleted from shape (${shapeString}) \n`
         } else if (frame.operation === 'set') {
-          text += `${' '}${location}  ${Chalk.red.bold('error')} - Property '${
+          text += `${' '}${location}  ${Chalk.grey.bold(
+            'create'
+          )} - Property '${
             frame.property
           }' was added to shape (${shapeString}) \n`
         } else if (frame.operation === 'type') {
           text += `${' '}${location}  ${Chalk.yellow.bold(
-            'warn'
+            'type update'
           )}${'  '}- Property '${frame.property}' has changed it's type from '${
             frame.oldType
           }' to '${frame.newType}' \n`

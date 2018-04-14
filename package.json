@@ -11,8 +11,6 @@
   ],
   "scripts": {
     "lint": "eslint ./**/*.js",
-    "test": "nyc mocha -t 5000 --exit ./test/**/*.js",
-    "coverage": "npm run test && nyc report --reporter=html",
     "patch": "np patch --yolo",
     "minor": "np minor --yolo",
     "major": "np major --yolo"
@@ -28,17 +26,14 @@
   },
   "homepage": "https://github.com/StarpTech/shaped#readme",
   "dependencies": {
-    "chalk": "^2.3.0",
+    "chalk": "^2.3.2",
     "error-stack-parser": "^2.0.1",
     "log-update": "^2.3.0"
   },
   "devDependencies": {
-    "code": "^5.1.2",
-    "eslint": "^4.14.0",
-    "eslint-config-hemera": "0.0.2",
-    "mocha": "^4.1.0",
-    "np": "^2.18.3",
-    "nyc": "^11.4.1",
-    "prettier": "^1.9.2"
+    "eslint": "^4.19.1",
+    "eslint-config-hemera": "0.0.6",
+    "np": "^2.20.1",
+    "prettier": "^1.12.0"
   }
 }
