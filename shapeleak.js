@@ -5,31 +5,31 @@ const Chalk = require('chalk')
 const LogUpdate = require('log-update')
 const items = new Map()
 
+function getStack(functionName) {
+  const trace = {}
+  Error.captureStackTrace(trace)
+  const frames = ErrorStackParser.parse(trace)
+  let index = 0
+
+  for (let i = 0; i < frames.length; i++) {
+    const frame = frames[i]
+    if (frame.functionName === functionName) {
+      if (frames[i + 1].functionName !== functionName) {
+        index = i + 1
+        break
+      }
+    }
+  }
+
+  return frames[index]
+}
+
 function build(pObject) {
   if (
     (typeof pObject !== 'object' && typeof pObject !== 'function') ||
     pObject === null
   ) {
     return pObject
-  }
-
-  function getStack(functionName) {
-    const trace = {}
-    Error.captureStackTrace(trace)
-    const frames = ErrorStackParser.parse(trace)
-    let index = 0
-
-    for (let i = 0; i < frames.length; i++) {
-      const frame = frames[i]
-      if (frame.functionName === functionName) {
-        if (frames[i + 1].functionName !== functionName) {
-          index = i + 1
-          break
-        }
-      }
-    }
-
-    return frames[index]
   }
 
   function draw() {
@@ -52,7 +52,7 @@ function build(pObject) {
             frame.property
           }' was deleted from shape (${shapeString}) \n`
         } else if (frame.operation === 'set') {
-          text += `${' '}${location}  ${Chalk.grey.bold(
+          text += `${' '}${location}  ${Chalk.cyan.bold(
             'create'
           )} - Property '${
             frame.property
